@@ -5,6 +5,7 @@ import operator
 import re
 from collections import OrderedDict
 sku = input("SKU\n")
+normalizeList = []
 rawTeams = requests.get("https://api.vexdb.io/v1/get_rankings?sku="+sku)
 cleanTeams = rawTeams.json()
 rawSeason = requests.get("https://api.vexdb.io/v1/get_events?sku="+sku) #REE VEXDB
@@ -25,11 +26,13 @@ for team in cleanTeams['result']:
     cleanAwards = rawAwards.json()
     for award in cleanAwards['result']:
         if("Excellence" in award['name']):
-            awardTotal+=10
-        elif("Champion" in award['name']):
             awardTotal+=8
+        elif("Champion" in award['name']):
+            awardTotal+=10
         elif("Judges" in award['name']):
             awardTotal+=2
+        elif("Semifinalists" in award['name']):
+            awardTotal+=3
         else:
             awardTotal+=6
     rawSkills = requests.get("https://api.vexdb.io/v1/get_skills?team=" + team['team'] + "&sku=" + sku)
@@ -42,7 +45,9 @@ for team in cleanTeams['result']:
         maxSkill = 0
     finalScore = (3*CCVM) + (1.5*awardTotal) + 1.2*(pCCVM + twopCCVM) + (2*maxSkill) + (0.3*wp) + (0.2*(ap+sp))
     finalList[team['team']] = int(finalScore)
+    normalizeList.append(int(finalScore))
 finalList = OrderedDict(sorted(finalList.items(), key=lambda kv: kv[1], reverse=True))
+
 for key, value in finalList.items():
     print(key, value)
 with open('result.json', 'w') as fp:

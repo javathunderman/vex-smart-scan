@@ -3,6 +3,7 @@ import com.google.gson.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class Team {
   private String team;
@@ -13,7 +14,7 @@ public class Team {
   private int ap;
   private int sp;
   private double trsp;
-  private int awards;
+  private int awards = 0;
   private int skills;
   private String sku;
   private double finalScore;
@@ -31,7 +32,7 @@ public class Team {
     return((3*ccwm) + (1.5*awards) + 1.5*(pccvm + twopCCVM) + (3*skills) + (0.3*wp) + (0.2*(ap+sp)));
   }
   public String toString() {
-    String output = "Team: " + team +"\nccwm: " + ccwm + "\nwp: " + wp + "\nap" + ap + "\nsp: " + sp + "\ntrsp: " + trsp;
+    String output = "Team: " + team +"\nccwm: " + ccwm + "\nwp: " + wp + "\nap: " + ap + "\nsp: " + sp + "\ntrsp: " + trsp + "\nawards: " + awards + "\nSkills: " + skills +"\n";
     return(output);
   }
   public String getTeam() {
@@ -69,13 +70,40 @@ public class Team {
   }
   public void setAwards(String season) throws IOException {
     URL url = new URL("http://api.vexdb.io/v1/get_awards?team=" + team + "&season=" + season);
-    System.out.println(url);
+    ArrayList<String> awardList = new ArrayList<String>();
     InputStreamReader reader = new InputStreamReader(url.openStream());
     JsonParser jsonParser = new JsonParser();
     JsonArray results = jsonParser.parse(reader)
             .getAsJsonObject().getAsJsonArray("result");
-    for (JsonElement result : results) {
-      System.out.println(result);
+    for(JsonElement result: results) {
+      JsonObject temp = result.getAsJsonObject();
+      String stuff = String.valueOf(temp.get("name"));
+      awardList.add(stuff);
+    }
+    for(String award: awardList) {
+      if(award.contains("Excellence"))
+        awards+=8;
+      else if(award.contains("Champions"))
+        awards+=10;
+      else if(award.contains("Semifinalists"))
+        awards+=7;
+      else if(award.contains("Judges"))
+        awards+=3;
+      else
+        awards+=6;
+    }
+  }
+  public int getAwards() {
+    return awards;
+  }
+  public void setSkills() throws IOException {
+    URL url = new URL("http://api.vexdb.io/v1/get_skills?team=" + team + "&sku=" + sku);
+    ArrayList<Integer> skillsList = new ArrayList<Integer>();
+    InputStreamReader reader = new InputStreamReader(url.openStream());
+    JsonParser jsonParser = new JsonParser();
+    JsonArray results = (JsonArray) jsonParser.parse(reader).getAsJsonObject().get("result"); //idk what the hell this is
+    for(JsonElement result: results) {
+      JsonObject temp = result.getAsJsonObject();
     }
   }
 }

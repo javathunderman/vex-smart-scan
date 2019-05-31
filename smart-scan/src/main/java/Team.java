@@ -97,13 +97,15 @@ public class Team {
     return awards;
   }
   public void setSkills() throws IOException {
-    URL url = new URL("http://api.vexdb.io/v1/get_skills?team=" + team + "&sku=" + sku);
-    ArrayList<Integer> skillsList = new ArrayList<Integer>();
+    URL url = new URL("http://api.vexdb.io/v1/get_skills?type=2&team=" + team + "&sku=" + sku);
     InputStreamReader reader = new InputStreamReader(url.openStream());
     JsonParser jsonParser = new JsonParser();
     JsonArray results = (JsonArray) jsonParser.parse(reader).getAsJsonObject().get("result"); //idk what the hell this is
     for(JsonElement result: results) {
       JsonObject temp = result.getAsJsonObject();
+      String stuff = String.valueOf(temp.get("score"));
+      skills = Integer.valueOf(stuff);
+
     }
   }
 }

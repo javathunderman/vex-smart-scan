@@ -37,8 +37,8 @@ public class Event {
     public String toString() {
         return("SKU: " + sku + "\nSeason: " + season + "\nDate: " + datetime);
     }
-    public String getPreviousSeason() {
-        String [] seasonList = {"In+The+Zone", "Turning+Point", "Tower+Takeover"};
+    public String getPreviousSeason(boolean twoyears) {
+        String [] seasonList = {"Starstruck", "In+The+Zone", "Turning+Point", "Tower+Takeover"};
         int index = -1;
         for(int i = 0; i<seasonList.length; i++) {
             if(seasonList[i].equals(season)) {
@@ -50,7 +50,13 @@ public class Event {
         if(index-1 < 0) {
             return("No season data found");
         }
-        return seasonList[index-1];
+        if(twoyears) {
+            return seasonList[index-2];
+        }
+        else {
+            return seasonList[index-1];
+        }
+
     }
 }
 

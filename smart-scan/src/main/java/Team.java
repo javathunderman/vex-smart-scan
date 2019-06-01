@@ -3,7 +3,13 @@ import com.google.gson.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TreeSet;
 
 public class Team {
   private String team;
@@ -17,7 +23,7 @@ public class Team {
   private int awards = 0;
   private int skills;
   private String sku;
-  private double finalScore;
+  private int finalScore;
 
   public Team(String team, String sku, double ccwm, int wp, int ap, int sp, double trsp) {
     this.team = team;
@@ -27,12 +33,18 @@ public class Team {
     this.ap = ap;
     this.sp = sp;
     this.trsp = trsp;
+    this.pccvm = 0.0;
   }
-  public double finalScore() {
-    return((3*ccwm) + (1.5*awards) + 1.5*(pccvm + twopCCVM) + (3*skills) + (0.3*wp) + (0.2*(ap+sp)));
+  public void setfinalScore() {
+    double tmpfinalScore = (3*ccwm) + (1.5*awards) + 1.5*(pccvm + twopCCVM) + (3*skills) + (0.3*wp) + (0.2*(ap+sp));
+    this.finalScore = ((int)tmpfinalScore);
+    //return((int)tmpfinalScore);
+  }
+  public int getFinalScore() {
+    return finalScore;
   }
   public String toString() {
-    String output = "Team: " + team +"\nccwm: " + ccwm + "\nwp: " + wp + "\nap: " + ap + "\nsp: " + sp + "\ntrsp: " + trsp + "\nawards: " + awards + "\nSkills: " + skills +"\n";
+    String output = "Team: " + team +"\nccwm: " + ccwm + "\nwp: " + wp + "\nap: " + ap + "\nsp: " + sp + "\ntrsp: " + trsp + "\nawards: " + awards + "\nSkills: " + skills +"\npccvm: " + pccvm + "\ntwoPCCVM: " + twopCCVM;
     return(output);
   }
   public String getTeam() {
@@ -108,4 +120,29 @@ public class Team {
 
     }
   }
+  public void setPccvm(boolean twoyears) throws IOException {
+    try {
+      if(twoyears) {
+        this.twopCCVM = (PreviousSeasons.setPCCWM(team, sku, twoyears));
+      }
+      else {
+        this.pccvm = (PreviousSeasons.setPCCWM(team, sku, twoyears));
+      }
+
+    }
+    catch (Exception e) {
+      if(twoyears) {
+        this.twopCCVM = 0.0;
+      }
+      else {
+        this.pccvm = 0.0;
+      }
+
+    }
+
+  }
+  private static Date getDateNearest(List<Date> dates, Date targetDate){
+    return new TreeSet<Date>(dates).lower(targetDate);
+  }
+
 }

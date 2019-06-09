@@ -10,7 +10,11 @@ import com.google.gson.*;
 public class Rank {
 
   public static void main(String[] ignored) throws Exception {
-    String skuOriginal = "RE-VRC-18-7443";
+    String skuOriginal = ignored[0];
+    if(skuOriginal.equals(null)) {
+      System.out.println("u w0t m8");
+      System.exit(0);
+    }
     URL url = new URL("http://api.vexdb.io/v1/get_rankings?sku="+skuOriginal);
     InputStreamReader reader = new InputStreamReader(url.openStream());
     List teamList = new ArrayList<Team>();

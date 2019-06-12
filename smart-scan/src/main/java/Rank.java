@@ -18,7 +18,7 @@ public class Rank {
     URL url = new URL("http://api.vexdb.io/v1/get_rankings?sku="+skuOriginal);
     InputStreamReader reader = new InputStreamReader(url.openStream());
     List teamList = new ArrayList<Team>();
-
+    List resultList = new ArrayList<Result>();
     JsonParser jsonParser = new JsonParser();
     JsonArray results = jsonParser.parse(reader)
             .getAsJsonObject().getAsJsonArray("result");
@@ -44,11 +44,10 @@ public class Rank {
     Collections.reverse(teamList);
     i = 0;
     while(i<teamList.size()) {
-      System.out.println(((Team) teamList.get(i)).getTeam() + ": " + ((Team) teamList.get(i)).getFinalScore());
+      resultList.add(new Result (((Team) teamList.get(i)).getTeam(), ((Team) teamList.get(i)).getFinalScore()));
       i++;
     }
-
-
+    String finalJson = new Gson().toJson(resultList);
+    System.out.println(finalJson);
   }
-
 }

@@ -1,16 +1,7 @@
-# smart_scan
+# Smart Scan - App
 
-A new Flutter application.
+App client for Smart Scan. Meant to be used in conjunction with the Node.js server and Java backend. 
 
-## Getting Started
+Written in Flutter for cross-platform support. 
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Note: API endpoint must be changed from internal IP to another domain name when domain is operational. 

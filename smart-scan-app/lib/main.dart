@@ -66,7 +66,7 @@ class HomePageState extends State<HomePage> {
 
   Future<String> getData() async {
     var response = await http.get(
-        Uri.encodeFull("http://192.168.1.120:3000/users?sku="+sku),
+        Uri.encodeFull("http://smart-scan.mercuryrobotics.tk/users?sku="+sku),
         headers: {
           "Accept": "application/json"
         }

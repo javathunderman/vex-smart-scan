@@ -30,6 +30,20 @@ exports.findOne = (req, res) => {
                 message: "Tournament not found with id " + req.params.tournamentId
             });
         }
+        var endDate = new Date();
+        var timeDiff = endDate.getTime() - tournament.updatedAt.getTime();
+        timeDiff/=60000;
+        if (timeDiff > 20) {
+          exec('java -jar app/controllers/smart-scan.jar ' + tournament.sku, (error, stdout, stderr) => {
+                if (error) {
+                  console.error(`exec error: ${error}`);
+                  return;
+                }
+                tournament.content = stdout;
+                tournament.save();
+                console.log(tournament);
+          });
+        }
         res.send(tournament);
     }).catch(err => {
         if(err.kind === 'ObjectId') {

@@ -35,6 +35,18 @@ class _MyCustomFormState extends State<MyCustomForm> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Smart Scan Rankings'),
+        actions:  <Widget>[
+      // action button
+      IconButton(
+      icon: Icon(Icons.info),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => infoPage()),
+        );
+      },
+    ),
+    ]
       ),
       body: Container(
       child: Column(children: <Widget>
@@ -178,4 +190,31 @@ class HomePageState extends State<HomePage> {
       );
     }
   }
+}
+
+class infoPage extends StatefulWidget {
+  @override
+  infoPageState createState() => new infoPageState();
+}
+class infoPageState extends State<infoPage> {
+
+  @override
+  Widget build(BuildContext context) {
+      return new Scaffold(
+
+        appBar: new AppBar(title: new Text("Smart Scan Rankings"),
+            backgroundColor: Colors.blue),
+
+        body: Center( child: Text.rich(
+          TextSpan(
+            text: 'Information and license\n\n', // default text style
+            style: TextStyle(fontSize: 25),
+            children: <TextSpan>[
+              TextSpan(text: 'Smart Scan was created by javathunderman (Arjun V.) of Vex Robotics Team 4001A. \n\nThe code for this project is available at https://github.com/javathunderman/vex-smart-scan\n\nLicensed under GNU GPL v3.0. ', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 15)),
+            ],
+          ),
+          textAlign: TextAlign.center,
+        )),
+      );
+    }
 }

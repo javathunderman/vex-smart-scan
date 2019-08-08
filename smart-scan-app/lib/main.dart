@@ -66,18 +66,16 @@ class HomePageState extends State<HomePage> {
 
   Future<String> getData() async {
     var response = await http.get(
-        Uri.encodeFull("http://smart-scan.mercuryrobotics.tk/users?sku="+sku),
+        Uri.encodeFull("http://smart-scan.mercuryrobotics.tk/tournaments/"+sku),
         headers: {
           "Accept": "application/json"
         }
     );
 
     this.setState(() {
-      data = json.decode(response.body);
+      var parsedresponse =  json.decode(response.body);
+      data = json.decode(parsedresponse['content']);
     });
-
-
-
     return "Success!";
   }
 
@@ -88,34 +86,62 @@ class HomePageState extends State<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context){
-    return new Scaffold(
+  Widget build(BuildContext context) {
+    if (data != null) {
+      return new Scaffold(
 
-      appBar: new AppBar(title: new Text("Smart Scan Rankings"), backgroundColor: Colors.blue),
+        appBar: new AppBar(title: new Text("Smart Scan Rankings"),
+            backgroundColor: Colors.blue),
 
-      body:
-
-      ListView.builder(
-        itemCount: data == null ? 0 : data.length,
-        itemBuilder: (BuildContext context, int index){
-          return new Card(
-            child: new Text.rich(
-              TextSpan(
-                text: (index+1).toString() +". " + data[index]['name'], // default text style
-                children: <TextSpan>[
-                  TextSpan(text: '\nScore: ', style: TextStyle(fontStyle: FontStyle.italic)),
-                  TextSpan(text: (data[index]['score']).toString(), style: TextStyle(fontStyle: FontStyle.italic)),
-                ],
+        body:
+        ListView.builder(
+          itemCount: data == null ? 0 : data.length,
+          itemBuilder: (BuildContext context, int index) {
+            return new Card(
+              child: new Text.rich(
+                TextSpan(
+                  text: (index + 1).toString() + ". " + data[index]['name'],
+                  // default text style
+                  children: <TextSpan>[
+                    TextSpan(text: '\nScore: ',
+                        style: TextStyle(fontStyle: FontStyle.italic)),
+                    TextSpan(text: (data[index]['score']).toString(),
+                        style: TextStyle(fontStyle: FontStyle.italic)),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: initState,
-        child: Icon(Icons.refresh),
-      ),
+            );
+          },
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: initState,
+          child: Icon(Icons.refresh),
+        ),
 
-    );
+      );
+    }
+    else {
+      return new Scaffold(
+
+        appBar: new AppBar(title: new Text("Smart Scan Rankings"),
+            backgroundColor: Colors.blue),
+
+        body: Center( child: Text.rich(
+          TextSpan(
+            text: 'Error\n', // default text style
+            style: TextStyle(fontSize: 25),
+            children: <TextSpan>[
+              TextSpan(text: 'Your request could not be processed at this time. Please try again later. ', style: TextStyle(fontStyle: FontStyle.italic, fontSize: 15)),
+            ],
+          ),
+          textAlign: TextAlign.center,
+        )),
+        floatingActionButton: FloatingActionButton(
+          onPressed: initState,
+          child: Icon(Icons.refresh),
+        ),
+
+      );
+    }
   }
 }

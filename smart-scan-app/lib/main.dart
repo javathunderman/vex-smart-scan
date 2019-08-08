@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 void main() => runApp(MyApp());
 String sku;
+String dropdownvalue;
 class MyApp extends StatelessWidget {
 
   @override
@@ -35,11 +36,46 @@ class _MyCustomFormState extends State<MyCustomForm> {
       appBar: AppBar(
         title: Text('Smart Scan Rankings'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: TextField(
-          controller: myController,
+      body: Container(
+      child: Column(children: <Widget>
+        [Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Enter the last four digits of the tournament SKU: ',
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          )
         ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: TextField(
+            controller: myController,
+          ),
+        ),
+        Text(
+          'Season selector: ',
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      DropdownButton<String>(
+        value: dropdownvalue,
+        onChanged: (String newValue) {
+          setState(() {
+            dropdownvalue = newValue;
+          });
+        },
+        items: <String>['Tower Takeover', 'Turning Point', 'In the Zone']
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ),
+      ]
+      ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -49,9 +85,8 @@ class _MyCustomFormState extends State<MyCustomForm> {
             MaterialPageRoute(builder: (context) => HomePage()),
           );
         },
-        child: Icon(Icons.refresh),
+        child: Icon(Icons.arrow_forward),
       ),
-
     );
   }
 }
@@ -65,6 +100,15 @@ class HomePageState extends State<HomePage> {
   List data;
 
   Future<String> getData() async {
+    if(dropdownvalue == "Turning Point") {
+      sku = "RE-VRC-18-" + sku;
+    }
+    else if(dropdownvalue == "In the Zone") {
+      sku = "RE-VRC-17-" + sku;
+    }
+    else {
+      sku = "RE-VRC-19-"+ sku;
+    }
     var response = await http.get(
         Uri.encodeFull("http://smart-scan.mercuryrobotics.tk/tournaments/"+sku),
         headers: {
@@ -113,11 +157,6 @@ class HomePageState extends State<HomePage> {
             );
           },
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: initState,
-          child: Icon(Icons.refresh),
-        ),
-
       );
     }
     else {
@@ -136,11 +175,6 @@ class HomePageState extends State<HomePage> {
           ),
           textAlign: TextAlign.center,
         )),
-        floatingActionButton: FloatingActionButton(
-          onPressed: initState,
-          child: Icon(Icons.refresh),
-        ),
-
       );
     }
   }

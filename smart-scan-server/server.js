@@ -32,6 +32,7 @@ app.get('/', (req, res) => {
 });
 
 require('./app/routes/tournament.routes.js')(app);
+require('./app/routes/robot.routes.js')(app);
 
 // listen for requests
 app.listen(3000, () => {

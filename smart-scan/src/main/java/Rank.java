@@ -3,7 +3,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import com.google.gson.*;
 
 
@@ -11,8 +12,19 @@ public class Rank {
 
   public static void main(String[] ignored) throws Exception {
     String skuOriginal = ignored[0];
+    String regexCheck = "^RE-VRC-(17|18|19|)-(\\d\\d\\d\\d)";
+    Pattern r = Pattern.compile(regexCheck);
+    Matcher m = r.matcher(skuOriginal);
     if(skuOriginal.equals(null)) {
       System.out.println("u w0t m8");
+      System.exit(0);
+    }
+    if(skuOriginal.equals("rundebug")) {
+      System.out.println("[{\"name\":\"4001A\",\"score\":194},{\"name\":\"8637A\",\"score\":139},{\"name\":\"729M\",\"score\":119},{\"name\":\"4001F\",\"score\":99},{\"name\":\"242A\",\"score\":79},{\"name\":\"242Z\",\"score\":70},{\"name\":\"242F\",\"score\":65},{\"name\":\"9071B\",\"score\":50},{\"name\":\"242B\",\"score\":43},{\"name\":\"4017A\",\"score\":33},{\"name\":\"242D\",\"score\":31},{\"name\":\"19030P\",\"score\":28},{\"name\":\"9071A\",\"score\":20},{\"name\":\"9071C\",\"score\":15},{\"name\":\"19030C\",\"score\":14},{\"name\":\"9071X\",\"score\":9},{\"name\":\"242C\",\"score\":4},{\"name\":\"4001E\",\"score\":2},{\"name\":\"9071Y\",\"score\":-4},{\"name\":\"19030A\",\"score\":-6},{\"name\":\"242E\",\"score\":-18},{\"name\":\"4017B\",\"score\":-21}]");
+      System.exit(0);
+    }
+    if(!m.find()) {
+      System.out.println("Not a valid SKU");
       System.exit(0);
     }
     URL url = new URL("http://api.vexdb.io/v1/get_rankings?sku="+skuOriginal);

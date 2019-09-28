@@ -1,4 +1,5 @@
 import com.google.gson.*;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 public class Team {
-  private String team;
+  @SerializedName(value="team", alternate="number") private String team;
   private double ccwm;
   private double pccvm;
   private double twopCCVM;
@@ -35,8 +36,26 @@ public class Team {
     this.trsp = trsp;
     this.pccvm = 0.0;
   }
+  public Team(String team) {
+    this.team = team;
+    this.sku = "";
+    this.ccwm = 0.0;
+    this.wp = 0;
+    this.ap = 0;
+    this.sp = 0;
+    this.trsp = 0;
+    this.pccvm = 0.0;
+  }
+  public void setSKU(String skuOriginal) {
+    this.sku = skuOriginal;
+  }
   public void setfinalScore() {
     double tmpfinalScore = (3*ccwm) + (1.5*awards) + 1.5*(pccvm + twopCCVM) + (3*skills) + (0.3*wp) + (0.2*(ap+sp));
+    this.finalScore = ((int)tmpfinalScore);
+    //return((int)tmpfinalScore);
+  }
+  public void setfinalScoreNR() {
+    double tmpfinalScore = (1.5*awards) + 3*(pccvm + twopCCVM) + (3*skills) + (0.3*wp) + (0.2*(ap+sp));
     this.finalScore = ((int)tmpfinalScore);
     //return((int)tmpfinalScore);
   }
@@ -121,6 +140,7 @@ public class Team {
     }
   }
   public void setPccvm(boolean twoyears) throws IOException {
+    //System.out.println("SKU" + sku);
     try {
       if(twoyears) {
         this.twopCCVM = (PreviousSeasons.setPCCWM(team, sku, twoyears));
@@ -133,9 +153,11 @@ public class Team {
     catch (Exception e) {
       if(twoyears) {
         this.twopCCVM = 0.0;
+        //System.out.println(e);
       }
       else {
         this.pccvm = 0.0;
+        //System.out.println(e);
       }
 
     }
@@ -144,5 +166,28 @@ public class Team {
   private static Date getDateNearest(List<Date> dates, Date targetDate){
     return new TreeSet<Date>(dates).lower(targetDate);
   }
-
+  public void setPWP() {
+    try {
+      this.wp = (PreviousSeasons.setPWP(team, sku));
+    }
+    catch (Exception e) {
+      this.wp = 0;
+    }
+  }
+  public void setPAP() {
+    try {
+      this.ap = (PreviousSeasons.setPAP(team, sku));
+    }
+    catch (Exception e) {
+      this.ap = 0;
+    }
+  }
+  public void setPSP() {
+    try {
+      this.sp = (PreviousSeasons.setPSP(team, sku));
+    }
+    catch (Exception e) {
+      this.sp = 0;
+    }
+  }
 }

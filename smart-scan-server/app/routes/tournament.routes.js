@@ -3,4 +3,5 @@ module.exports = (app) => {
 
     // Retrieve a single Note with noteId
     app.get('/tournaments/:tournamentId', tournaments.findOne);
+    app.get('/tournaments/rerank/:tournamentId', tournaments.findOneAndRerank);
 }

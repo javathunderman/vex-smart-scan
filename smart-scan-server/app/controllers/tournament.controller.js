@@ -7,8 +7,8 @@ const {
 } = require('child_process');
 // Find a single tournament with an SKU
 exports.findOne = (req, res) => {
-  var skuMatch = "^RE-VRC-(17|18|19|)-(\\d\\d\\d\\d)";
-  if (skuMatch.match(req.params.tournamentId) || req.params.tournamentId == "rundebug") { //anti RCE filtering
+  var skuMatch = new RegExp("^RE-VRC-(17|18|19|)-(\\d\\d\\d\\d)");
+  if (skuMatch.test(req.params.tournamentId) || req.params.tournamentId == "rundebug") { //anti RCE filtering
     Tournament.findOne({ //look up tournament in the DB
         sku: req.params.tournamentId
       })

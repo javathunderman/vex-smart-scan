@@ -52,7 +52,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
           Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                'Enter the a team ID to look up events: ',
+                'Enter a team ID to look up events: ',
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -64,7 +64,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
             ),
           ),
           Text(
-            'Season selector: ',
+            'Select a season: ',
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(fontWeight: FontWeight.bold),
@@ -83,6 +83,12 @@ class _MyCustomFormState extends State<MyCustomForm> {
                 child: Text(value),
               );
             }).toList(),
+          ),
+          Text(
+            'Created by Arjun (javathunderman) of 4001A',
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ]),
       ),
@@ -211,8 +217,7 @@ class resultsPageState extends State<resultsPage> {
 
   Future<String> getData() async {
     var response = await http.get(
-        Uri.encodeFull(
-            "http://smart-scan.mercuryrobotics.tk/tournaments/" + sku),
+        Uri.encodeFull("http://smart-scan.smartscan.tk/tournaments/" + sku),
         headers: {"Accept": "application/json"});
 
     this.setState(() {

@@ -7,6 +7,8 @@ const {
 } = require('child_process');
 // Find a single tournament with an SKU
 exports.findOne = (req, res) => {
+  var skuMatch = "^RE-VRC-(17|18|19|)-(\\d\\d\\d\\d)";
+  if(skuMatch.match(req.params.tournamentId) || req.params.tournamentId == "rundebug") {
   Tournament.findOne({
       sku: req.params.tournamentId
     })
@@ -60,4 +62,8 @@ exports.findOne = (req, res) => {
         message: "Error retrieving tournament with id " + req.params.tournamentId
       });
     });
+  }
+  else {
+    res.send("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+  }
 };

@@ -8,62 +8,59 @@ const {
 // Find a single tournament with an SKU
 exports.findOne = (req, res) => {
   var skuMatch = "^RE-VRC-(17|18|19|)-(\\d\\d\\d\\d)";
-  if(skuMatch.match(req.params.tournamentId) || req.params.tournamentId == "rundebug") {
-  Tournament.findOne({
-      sku: req.params.tournamentId
-    })
-    .then(tournament => {
-      if (!tournament) {
-        exec('java -jar app/controllers/smart-scan.jar ' + req.params.tournamentId, (error, stdout, stderr) => {
-          if (error) {
-            console.error(`exec error: ${error}`);
-            return;
-          }
-          // Create a Tournament
-          const tournament = new Tournament({
-            sku: req.params.tournamentId,
-            content: stdout
-          });
-
-          // Save Tournament in the database
-          tournament.save()
-            .then(data => {
-              //console.log(data);
-            }).catch(err => {
-              console.log("Error while accessing newly saved data")
+  if (skuMatch.match(req.params.tournamentId) || req.params.tournamentId == "rundebug") { //anti RCE filtering
+    Tournament.findOne({ //look up tournament in the DB
+        sku: req.params.tournamentId
+      })
+      .then(tournament => { //based on result
+        if (!tournament) { //if tournament does not exist
+          exec('java -jar app/controllers/smart-scan.jar ' + req.params.tournamentId, (error, stdout, stderr) => { //pass the SKU to the jar
+            if (error) {
+              console.error(`exec error: ${error}`); //catch and return errors
+              return;
+            }
+            // Create a Tournament
+            const tournament = new Tournament({
+              sku: req.params.tournamentId,
+              content: stdout //using jar output here
             });
+
+            // Save Tournament in the database
+            tournament.save()
+              .then(data => {
+              }).catch(err => {
+                console.log("Error while accessing newly saved data")
+              });
+          });
+          return res.status(404).send({
+            message: "Tournament not found with id " + req.params.tournamentId
+          });
+        }
+        var endDate = new Date();
+        var timeDiff = endDate.getTime() - tournament.updatedAt.getTime();
+        timeDiff /= 60000;
+        if (timeDiff > 20) { //if older than 20 min
+          exec('java -jar app/controllers/smart-scan.jar ' + tournament.sku, (error, stdout, stderr) => { //run again
+            if (error) {
+              console.error(`exec error: ${error}`);
+              return;
+            }
+            tournament.content = stdout;
+            tournament.save();
+          });
+        }
+        res.send(tournament);
+      }).catch(err => {
+        if (err.kind === 'ObjectId') {
+          return res.status(404).send({
+            message: "Tournament not found with id " + req.params.tournamentId
+          });
+        }
+        return res.status(500).send({
+          message: "Error retrieving tournament with id " + req.params.tournamentId
         });
-        return res.status(404).send({
-          message: "Tournament not found with id " + req.params.tournamentId
-        });
-      }
-      var endDate = new Date();
-      var timeDiff = endDate.getTime() - tournament.updatedAt.getTime();
-      timeDiff /= 60000;
-      if (timeDiff > 20) {
-        exec('java -jar app/controllers/smart-scan.jar ' + tournament.sku, (error, stdout, stderr) => {
-          if (error) {
-            console.error(`exec error: ${error}`);
-            return;
-          }
-          tournament.content = stdout;
-          tournament.save();
-          //console.log(tournament);
-        });
-      }
-      res.send(tournament);
-    }).catch(err => {
-      if (err.kind === 'ObjectId') {
-        return res.status(404).send({
-          message: "Tournament not found with id " + req.params.tournamentId
-        });
-      }
-      return res.status(500).send({
-        message: "Error retrieving tournament with id " + req.params.tournamentId
       });
-    });
-  }
-  else {
-    res.send("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+  } else { //if bad request
+    res.send("https://www.youtube.com/watch?v=dQw4w9WgXcQ"); //return rick astley
   }
 };

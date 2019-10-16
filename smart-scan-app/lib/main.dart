@@ -85,7 +85,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
             }).toList(),
           ),
           Text(
-            'Created by Arjun (javathunderman) of 4001A',
+            '\n\nCreated by Arjun (javathunderman) of 4001A',
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(fontWeight: FontWeight.bold),
@@ -246,7 +246,7 @@ class resultsPageState extends State<resultsPage> {
             return new Card(
               child: new Text.rich(
                 TextSpan(
-                  text: (index + 1).toString() + ". " + data[index]['name'],
+                  text: (index + 1).toString() + ". " + data[index]['team'],
                   // default text style
                   children: <TextSpan>[
                     TextSpan(

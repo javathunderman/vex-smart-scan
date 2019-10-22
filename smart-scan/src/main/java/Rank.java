@@ -54,7 +54,7 @@ public class Rank {
         //System.out.println(((Team) teamList.get(i)).getTeam() + ": " + ((Team) teamList.get(i)).finalScore());
         i++;
       }
-      System.out.println(temp);
+      //System.out.println(temp);
       Collections.sort(teamList, new Output());
       Collections.reverse(teamList);
       i = 0;

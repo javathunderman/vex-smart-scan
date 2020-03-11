@@ -217,7 +217,7 @@ class resultsPageState extends State<resultsPage> {
 
   Future<String> getData() async {
     var response = await http.get(
-        Uri.encodeFull("http://smart-scan.smartscan.tk/tournaments/" + sku),
+        Uri.encodeFull("http://smartscan.tk/tournaments/" + sku),
         headers: {"Accept": "application/json"});
 
     this.setState(() {

@@ -1,4 +1,4 @@
-const Robot = require('../models/robot.model.js');
+const Robot = require('../models/robot.model');
 
 // Create and Save a new Robot
 exports.create = (req, res) => {

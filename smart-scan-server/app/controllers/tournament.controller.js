@@ -1,5 +1,5 @@
-const Tournament = require('../models/tournament.model.js');
-const Robot = require('../models/robot.model.js')
+const Tournament = require('../models/tournament.model');
+const Robot = require('../models/robot.model')
 var spawn = require('child_process').spawn;
 var moment = require('moment')
 const {

@@ -16,7 +16,6 @@ public class Event {
     public void setSeason() throws IOException {
 
         URL getEvents = new URL("http://api.vexdb.io/v1/get_events?sku=" + sku);
-        //System.out.println(url);
         InputStreamReader eventsReader = new InputStreamReader(getEvents.openStream());
         JsonParser jsonParser = new JsonParser();
         JsonArray results = (JsonArray) jsonParser.parse(eventsReader).getAsJsonObject().get("result"); //idk what the hell this is

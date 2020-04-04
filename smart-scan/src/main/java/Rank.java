@@ -25,7 +25,7 @@ public class Rank {
     }
 
     try {
-      URL getRankings = new URL("http://api.vexdb.io/v1/get_rankings?sku=" + urlParam);
+      URL getRankings = new URL("https://api.vexdb.io/v1/get_rankings?sku=" + urlParam);
       InputStreamReader rankingsReader = new InputStreamReader(getRankings.openStream());
       List teamList = new ArrayList<Team>();
       List resultList = new ArrayList<Result>();
@@ -60,7 +60,7 @@ public class Rank {
       System.out.println(finalJson);
     }
     catch (Exception IndexOutOfBoundsException) {
-      URL getTeams = new URL("http://api.vexdb.io/v1/get_teams?sku=" + urlParam);
+      URL getTeams = new URL("https://api.vexdb.io/v1/get_teams?sku=" + urlParam);
       InputStreamReader teamsReader = new InputStreamReader(getTeams.openStream());
       List teamList = new ArrayList<Team>();
       List resultList = new ArrayList<Result>();

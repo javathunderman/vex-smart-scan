@@ -31,7 +31,7 @@ public class PreviousSeasons {
         {
             System.out.println("Fatal exception, PCCWM date format");
         }
-        URL getEvents = new URL("http://api.vexdb.io/v1/get_events?season=" + eventThing.getPreviousSeason(twoyears) + "&team=" + team);
+        URL getEvents = new URL("https://api.vexdb.io/v1/get_events?season=" + eventThing.getPreviousSeason(twoyears) + "&team=" + team);
         InputStreamReader eventsReader = new InputStreamReader(getEvents.openStream());
         JsonParser jsonParser = new JsonParser();
         JsonArray results = (JsonArray) jsonParser.parse(eventsReader).getAsJsonObject().get("result");
@@ -68,7 +68,7 @@ public class PreviousSeasons {
     }
     public static double setPCCWM(String team, String oldSKU) throws IOException {
         JsonParser jsonParser = new JsonParser();
-        URL oldSKUURL = new URL("http://api.vexdb.io/v1/get_rankings?team="+ team + "&sku="+oldSKU);
+        URL oldSKUURL = new URL("https://api.vexdb.io/v1/get_rankings?team="+ team + "&sku="+oldSKU);
         InputStreamReader reader2 = new InputStreamReader(oldSKUURL.openStream());
 
         try {
@@ -81,7 +81,7 @@ public class PreviousSeasons {
         }
     }
     public static int setPWASP(String team, String oldSKU, String option) throws IOException {
-        URL url2 = new URL("http://api.vexdb.io/v1/get_rankings?team="+team + "&sku="+oldSKU);
+        URL url2 = new URL("https://api.vexdb.io/v1/get_rankings?team="+team + "&sku="+oldSKU);
         JsonParser jsonParser = new JsonParser();
         InputStreamReader reader2 = new InputStreamReader(url2.openStream());
         try {

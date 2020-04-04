@@ -1,12 +1,8 @@
 import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,12 +48,10 @@ public class Team {
   public void setfinalScore() {
     double tmpfinalScore = (3*ccwm) + (1.5*awards) + 1.5*(pccvm + twopCCVM) + (3*skills) + (0.3*wp) + (0.2*(ap+sp));
     this.finalScore = ((int)tmpfinalScore);
-    //return((int)tmpfinalScore);
   }
   public void setfinalScoreNR() {
     double tmpfinalScore = (1.5*awards) + 3*(pccvm + twopCCVM) + (3*skills) + (0.3*wp) + (0.2*(ap+sp));
     this.finalScore = ((int)tmpfinalScore);
-    //return((int)tmpfinalScore);
   }
   public int getFinalScore() {
     return finalScore;
@@ -140,7 +134,6 @@ public class Team {
     }
   }
   public void setPccvm(boolean twoyears) throws IOException {
-    //System.out.println("SKU" + sku);
     try {
       if(twoyears) {
         this.twopCCVM = (PreviousSeasons.setPCCWM(team, sku, twoyears));
@@ -153,11 +146,9 @@ public class Team {
     catch (Exception e) {
       if(twoyears) {
         this.twopCCVM = 0.0;
-        //System.out.println(e);
       }
       else {
         this.pccvm = 0.0;
-        //System.out.println(e);
       }
 
     }
@@ -168,7 +159,7 @@ public class Team {
   }
   public void setPWP() {
     try {
-      this.wp = (PreviousSeasons.setPWP(team, sku));
+      this.wp = (PreviousSeasons.setPWASP(team, sku, "wp"));
     }
     catch (Exception e) {
       this.wp = 0;
@@ -176,7 +167,7 @@ public class Team {
   }
   public void setPAP() {
     try {
-      this.ap = (PreviousSeasons.setPAP(team, sku));
+      this.ap = (PreviousSeasons.setPWASP(team, sku, "ap"));
     }
     catch (Exception e) {
       this.ap = 0;
@@ -184,7 +175,7 @@ public class Team {
   }
   public void setPSP() {
     try {
-      this.sp = (PreviousSeasons.setPSP(team, sku));
+      this.sp = (PreviousSeasons.setPWASP(team, sku, "sp"));
     }
     catch (Exception e) {
       this.sp = 0;

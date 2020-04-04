@@ -28,12 +28,13 @@ public class PreviousSeasons {
 
         }
         catch (Exception e)
-        {}
-        URL url = new URL("http://api.vexdb.io/v1/get_events?season=" + eventThing.getPreviousSeason(twoyears) + "&team=" + team);
-        //System.out.println(url);
-        InputStreamReader reader = new InputStreamReader(url.openStream());
+        {
+            System.out.println("Fatal exception, PCCWM date format");
+        }
+        URL getEvents = new URL("http://api.vexdb.io/v1/get_events?season=" + eventThing.getPreviousSeason(twoyears) + "&team=" + team);
+        InputStreamReader eventsReader = new InputStreamReader(getEvents.openStream());
         JsonParser jsonParser = new JsonParser();
-        JsonArray results = (JsonArray) jsonParser.parse(reader).getAsJsonObject().get("result"); //idk what the hell this is
+        JsonArray results = (JsonArray) jsonParser.parse(eventsReader).getAsJsonObject().get("result");
 
         for(JsonElement result: results) {
             JsonObject temp = result.getAsJsonObject();
@@ -42,14 +43,12 @@ public class PreviousSeasons {
             previousdates.add(stuff);
 
         }
-        //System.out.println(previousdates);
         for(int i = 0; i<previousdates.size(); i++) {
             Event newEvent = new Event(previousdates.get(i));
             newEvent.setSeason();
             String time = newEvent.getDatetime();
             time = time.replace("%3A", "");
             time = time.substring(0, time.indexOf("T"));
-            //System.out.println(time);
             try
             {
                 DateFormat formatter;
@@ -58,23 +57,19 @@ public class PreviousSeasons {
 
             }
             catch (Exception e)
-            {}
+            {
+                System.out.println("Fatal exception, PCCWM previous date format");
+            }
 
         }
-
-        //System.out.println(previousDateList);
-        //System.out.println(currentDate);
         Date nearest = (getDateNearest(previousDateList, currentDate));
-        //System.out.println(nearest);
         int indexSKUlookup = previousDateList.indexOf(nearest);
         String oldSKU = (previousdates.get(indexSKUlookup));
         URL url2 = new URL("http://api.vexdb.io/v1/get_rankings?team="+team + "&sku="+oldSKU);
-        //System.out.println(url2);
         InputStreamReader reader2 = new InputStreamReader(url2.openStream());
 
         try {
-            JsonArray stuff2 = (JsonArray) jsonParser.parse(reader2).getAsJsonObject().get("result"); //idk what the hell this is
-            //System.out.println(stuff2);
+            JsonArray stuff2 = (JsonArray) jsonParser.parse(reader2).getAsJsonObject().get("result");
             return(stuff2.get(0).getAsJsonObject().get("ccwm").getAsDouble());
 
         }
@@ -82,7 +77,7 @@ public class PreviousSeasons {
             return(0.0);
         }
     }
-    public static int setPWP(String team, String sku) throws IOException {
+    public static int setPWASP(String team, String sku, String option) throws IOException {
         ArrayList<String> previousdates = new ArrayList<>();
         ArrayList<Date> previousDateList = new ArrayList<>();
         Event eventThing = new Event(sku);
@@ -100,81 +95,11 @@ public class PreviousSeasons {
 
         }
         catch (Exception e)
-        {}
-        URL url = new URL("http://api.vexdb.io/v1/get_events?season=" + eventThing.getPreviousSeason(false) + "&team=" + team);
-        //System.out.println(url);
-        InputStreamReader reader = new InputStreamReader(url.openStream());
-        JsonParser jsonParser = new JsonParser();
-        JsonArray results = (JsonArray) jsonParser.parse(reader).getAsJsonObject().get("result"); //idk what the hell this is
-
-        for(JsonElement result: results) {
-            JsonObject temp = result.getAsJsonObject();
-            String stuff = String.valueOf(temp.get("sku"));
-            stuff = stuff.replace("\"", "");
-            previousdates.add(stuff);
-
-        }
-        //System.out.println(previousdates);
-        for(int i = 0; i<previousdates.size(); i++) {
-            Event newEvent = new Event(previousdates.get(i));
-            newEvent.setSeason();
-            String time = newEvent.getDatetime();
-            time = time.replace("%3A", "");
-            time = time.substring(0, time.indexOf("T"));
-            //System.out.println(time);
-            try
-            {
-                DateFormat formatter;
-                formatter = new SimpleDateFormat("yy-MM-dd");
-                previousDateList.add((Date)formatter.parse(time));
-
-            }
-            catch (Exception e)
-            {}
-
-        }
-
-        //System.out.println(previousDateList);
-        //System.out.println(currentDate);
-        Date nearest = (getDateNearest(previousDateList, currentDate));
-        //System.out.println(nearest);
-        int indexSKUlookup = previousDateList.indexOf(nearest);
-        String oldSKU = (previousdates.get(indexSKUlookup));
-        URL url2 = new URL("http://api.vexdb.io/v1/get_rankings?team="+team + "&sku="+oldSKU);
-        //System.out.println(url2);
-        InputStreamReader reader2 = new InputStreamReader(url2.openStream());
-
-        try {
-            JsonArray stuff2 = (JsonArray) jsonParser.parse(reader2).getAsJsonObject().get("result"); //idk what the hell this is
-            //System.out.println(stuff2);
-            return(stuff2.get(0).getAsJsonObject().get("wp").getAsInt());
-
-        }
-        catch (Exception e) {
-            return(0);
-        }
-    }
-    public static int setPAP(String team, String sku) throws IOException {
-        ArrayList<String> previousdates = new ArrayList<>();
-        ArrayList<Date> previousDateList = new ArrayList<>();
-        Event eventThing = new Event(sku);
-        eventThing.setSeason();
-        Date currentDate = null;
-        String currentDateString = eventThing.getDatetime();
-        currentDateString = currentDateString.replace("%3A", "");
-        currentDateString = currentDateString.substring(0, currentDateString.indexOf("T"));
-
-        try
         {
-            DateFormat formatter;
-            formatter = new SimpleDateFormat("yy-MM-dd");
-            currentDate = ((Date)formatter.parse(currentDateString));
-
+            System.out.println("Fatal exception, PWASP date format");
         }
-        catch (Exception e)
-        {}
         URL url = new URL("http://api.vexdb.io/v1/get_events?season=" + eventThing.getPreviousSeason(false) + "&team=" + team);
-        //System.out.println(url);
+        
         InputStreamReader reader = new InputStreamReader(url.openStream());
         JsonParser jsonParser = new JsonParser();
         JsonArray results = (JsonArray) jsonParser.parse(reader).getAsJsonObject().get("result"); //idk what the hell this is
@@ -186,14 +111,14 @@ public class PreviousSeasons {
             previousdates.add(stuff);
 
         }
-        //System.out.println(previousdates);
+        
         for(int i = 0; i<previousdates.size(); i++) {
             Event newEvent = new Event(previousdates.get(i));
             newEvent.setSeason();
             String time = newEvent.getDatetime();
             time = time.replace("%3A", "");
             time = time.substring(0, time.indexOf("T"));
-            //System.out.println(time);
+            
             try
             {
                 DateFormat formatter;
@@ -202,104 +127,38 @@ public class PreviousSeasons {
 
             }
             catch (Exception e)
-            {}
-
-        }
-
-        //System.out.println(previousDateList);
-        //System.out.println(currentDate);
-        Date nearest = (getDateNearest(previousDateList, currentDate));
-        //System.out.println(nearest);
-        int indexSKUlookup = previousDateList.indexOf(nearest);
-        String oldSKU = (previousdates.get(indexSKUlookup));
-        URL url2 = new URL("http://api.vexdb.io/v1/get_rankings?team="+team + "&sku="+oldSKU);
-        //System.out.println(url2);
-        InputStreamReader reader2 = new InputStreamReader(url2.openStream());
-
-        try {
-            JsonArray stuff2 = (JsonArray) jsonParser.parse(reader2).getAsJsonObject().get("result"); //idk what the hell this is
-            //System.out.println(stuff2);
-            return(stuff2.get(0).getAsJsonObject().get("ap").getAsInt());
-
-        }
-        catch (Exception e) {
-            return(0);
-        }
-    }
-    public static int setPSP(String team, String sku) throws IOException {
-        ArrayList<String> previousdates = new ArrayList<>();
-        ArrayList<Date> previousDateList = new ArrayList<>();
-        Event eventThing = new Event(sku);
-        eventThing.setSeason();
-        Date currentDate = null;
-        String currentDateString = eventThing.getDatetime();
-        currentDateString = currentDateString.replace("%3A", "");
-        currentDateString = currentDateString.substring(0, currentDateString.indexOf("T"));
-
-        try
-        {
-            DateFormat formatter;
-            formatter = new SimpleDateFormat("yy-MM-dd");
-            currentDate = ((Date)formatter.parse(currentDateString));
-
-        }
-        catch (Exception e)
-        {}
-        URL url = new URL("http://api.vexdb.io/v1/get_events?season=" + eventThing.getPreviousSeason(false) + "&team=" + team);
-        //System.out.println(url);
-        InputStreamReader reader = new InputStreamReader(url.openStream());
-        JsonParser jsonParser = new JsonParser();
-        JsonArray results = (JsonArray) jsonParser.parse(reader).getAsJsonObject().get("result"); //idk what the hell this is
-
-        for(JsonElement result: results) {
-            JsonObject temp = result.getAsJsonObject();
-            String stuff = String.valueOf(temp.get("sku"));
-            stuff = stuff.replace("\"", "");
-            previousdates.add(stuff);
-
-        }
-        //System.out.println(previousdates);
-        for(int i = 0; i<previousdates.size(); i++) {
-            Event newEvent = new Event(previousdates.get(i));
-            newEvent.setSeason();
-            String time = newEvent.getDatetime();
-            time = time.replace("%3A", "");
-            time = time.substring(0, time.indexOf("T"));
-            //System.out.println(time);
-            try
             {
-                DateFormat formatter;
-                formatter = new SimpleDateFormat("yy-MM-dd");
-                previousDateList.add((Date)formatter.parse(time));
-
+                System.out.println("Fata exception, PWASP previous date format");
             }
-            catch (Exception e)
-            {}
 
         }
 
-        //System.out.println(previousDateList);
-        //System.out.println(currentDate);
+        
+        
         Date nearest = (getDateNearest(previousDateList, currentDate));
-        //System.out.println(nearest);
+        
         int indexSKUlookup = previousDateList.indexOf(nearest);
         String oldSKU = (previousdates.get(indexSKUlookup));
         URL url2 = new URL("http://api.vexdb.io/v1/get_rankings?team="+team + "&sku="+oldSKU);
-        //System.out.println(url2);
+        
         InputStreamReader reader2 = new InputStreamReader(url2.openStream());
 
         try {
             JsonArray stuff2 = (JsonArray) jsonParser.parse(reader2).getAsJsonObject().get("result"); //idk what the hell this is
-            //System.out.println(url);
-            //System.out.println(url2);
-            //System.out.println(stuff2.get(0).getAsJsonObject().get("sp").getAsInt());
-            return(stuff2.get(0).getAsJsonObject().get("sp").getAsInt());
-
+            int result = 0;
+            if(option.equals("wp"))
+                result = (stuff2.get(0).getAsJsonObject().get("wp").getAsInt());
+            else if(option.equals("ap"))
+                result = (stuff2.get(0).getAsJsonObject().get("ap").getAsInt());
+            else if(option.equals("sp"))
+                result = (stuff2.get(0).getAsJsonObject().get("sp").getAsInt());
+            return result;
         }
         catch (Exception e) {
             return(0);
         }
     }
+
 
     private static Date getDateNearest(List<Date> dates, Date targetDate){
         return new TreeSet<Date>(dates).lower(targetDate);

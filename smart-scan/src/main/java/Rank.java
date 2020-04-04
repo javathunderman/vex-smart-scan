@@ -42,10 +42,10 @@ public class Rank {
       String season = (currentEvent.getSeason());
       int i = 0;
       while (i < teamList.size()) {
+        ((Team) teamList.get(i)).setOldSKU();
         ((Team) teamList.get(i)).setAwards(season);
         ((Team) teamList.get(i)).setSkills();
-        ((Team) teamList.get(i)).setPccvm(false);
-        ((Team) teamList.get(i)).setPccvm(true);
+        ((Team) teamList.get(i)).setPccvm();
         ((Team) teamList.get(i)).setfinalScore();
         i++;
       }
@@ -82,8 +82,7 @@ public class Rank {
         ((Team) teamList.get(i)).setPSP();
         ((Team) teamList.get(i)).setAwards(season);
         ((Team) teamList.get(i)).setSkills();
-        ((Team) teamList.get(i)).setPccvm(false);
-        ((Team) teamList.get(i)).setPccvm(true);
+        ((Team) teamList.get(i)).setPccvm();
         ((Team) teamList.get(i)).setfinalScoreNR();
         i++;
       }

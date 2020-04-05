@@ -1,12 +1,8 @@
 import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,20 +16,18 @@ public class Team {
   private int wp;
   private int ap;
   private int sp;
-  private double trsp;
   private int awards = 0;
   private int skills;
   private String sku;
   private int finalScore;
 
-  public Team(String team, String sku, double ccwm, int wp, int ap, int sp, double trsp) {
+  public Team(String team, String sku, double ccwm, int wp, int ap, int sp) {
     this.team = team;
     this.sku = sku;
     this.ccwm = ccwm;
     this.wp = wp;
     this.ap = ap;
     this.sp = sp;
-    this.trsp = trsp;
     this.pccvm = 0.0;
   }
   public Team(String team) {
@@ -43,7 +37,6 @@ public class Team {
     this.wp = 0;
     this.ap = 0;
     this.sp = 0;
-    this.trsp = 0;
     this.pccvm = 0.0;
   }
   public void setSKU(String skuOriginal) {
@@ -61,7 +54,7 @@ public class Team {
     return finalScore;
   }
   public String toString() {
-    String output = "Team: " + team +"\nccwm: " + ccwm + "\nwp: " + wp + "\nap: " + ap + "\nsp: " + sp + "\ntrsp: " + trsp + "\nawards: " + awards + "\nSkills: " + skills +"\npccvm: " + pccvm + "\ntwoPCCVM: " + twopCCVM;
+    String output = "Team: " + team +"\nccwm: " + ccwm + "\nwp: " + wp + "\nap: " + ap + "\nsp: " + sp + "\nawards: " + awards + "\nSkills: " + skills +"\npccvm: " + pccvm + "\ntwoPCCVM: " + twopCCVM;
     return(output);
   }
   public String getTeam() {
@@ -84,9 +77,6 @@ public class Team {
   }
   public int getSP() {
     return sp;
-  }
-  public double getTRSP() {
-    return trsp;
   }
   public int getAwardsTotal() {
     return awards;

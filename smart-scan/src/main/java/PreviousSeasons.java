@@ -28,7 +28,9 @@ public class PreviousSeasons {
 
         }
         catch (Exception e)
-        {}
+        {
+            System.out.println("Error, getOldSKU handler - parsing currentDateString");
+        }
         URL url = new URL("https://api.vexdb.io/v1/get_events?season=" + eventThing.getPreviousSeason(twoyears) + "&team=" + team);
         
         InputStreamReader reader = new InputStreamReader(url.openStream());
@@ -58,7 +60,9 @@ public class PreviousSeasons {
 
             }
             catch (Exception e)
-            {}
+            {
+                System.out.println("Error, getOldSKU handler - date formatter");
+            }
 
         }
 

@@ -1,8 +1,12 @@
 import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,9 +25,8 @@ public class Team {
   private int skills;
   private String sku;
   private int finalScore;
-  private String oldSKU = "";
-  private String old2SKU = "";
-  public Team(String team, String sku, double ccwm, int wp, int ap, int sp, double trsp, String oldSKU, String old2SKU) {
+
+  public Team(String team, String sku, double ccwm, int wp, int ap, int sp, double trsp) {
     this.team = team;
     this.sku = sku;
     this.ccwm = ccwm;
@@ -32,7 +35,6 @@ public class Team {
     this.sp = sp;
     this.trsp = trsp;
     this.pccvm = 0.0;
-    this.oldSKU = "";
   }
   public Team(String team) {
     this.team = team;
@@ -43,8 +45,6 @@ public class Team {
     this.sp = 0;
     this.trsp = 0;
     this.pccvm = 0.0;
-    this.oldSKU = "";
-    this.old2SKU = "";
   }
   public void setSKU(String skuOriginal) {
     this.sku = skuOriginal;
@@ -97,11 +97,8 @@ public class Team {
   public String getSku() {
     return sku;
   }
-  public String getOldSKU(){ return oldSKU; }
-  public String getOld2SKU(){return old2SKU;}
-
   public void setAwards(String season) throws IOException {
-    URL url = new URL("https://api.vexdb.io/v1/get_awards?team=" + team + "&season=" + season);
+    URL url = new URL("http://api.vexdb.io/v1/get_awards?team=" + team + "&season=" + season);
     ArrayList<String> awardList = new ArrayList<String>();
     InputStreamReader reader = new InputStreamReader(url.openStream());
     JsonParser jsonParser = new JsonParser();
@@ -129,7 +126,7 @@ public class Team {
     return awards;
   }
   public void setSkills() throws IOException {
-    URL url = new URL("https://api.vexdb.io/v1/get_skills?type=2&team=" + team + "&sku=" + sku);
+    URL url = new URL("http://api.vexdb.io/v1/get_skills?type=2&team=" + team + "&sku=" + sku);
     InputStreamReader reader = new InputStreamReader(url.openStream());
     JsonParser jsonParser = new JsonParser();
     JsonArray results = (JsonArray) jsonParser.parse(reader).getAsJsonObject().get("result"); //idk what the hell this is
@@ -140,16 +137,36 @@ public class Team {
 
     }
   }
-  public void setPccvm() throws IOException {
-    this.pccvm = PreviousSeasons.setPCCWM(team, oldSKU);
-    this.twopCCVM = PreviousSeasons.setPCCWM(team, old2SKU);
+  public void setPccvm(boolean twoyears) throws IOException {
+    
+    try {
+      if(twoyears) {
+        this.twopCCVM = (PreviousSeasons.setPCCWM(team, sku, twoyears));
+      }
+      else {
+        this.pccvm = (PreviousSeasons.setPCCWM(team, sku, twoyears));
+      }
+
+    }
+    catch (Exception e) {
+      if(twoyears) {
+        this.twopCCVM = 0.0;
+        
+      }
+      else {
+        this.pccvm = 0.0;
+        
+      }
+
+    }
+
   }
   private static Date getDateNearest(List<Date> dates, Date targetDate){
     return new TreeSet<Date>(dates).lower(targetDate);
   }
   public void setPWP() {
     try {
-      this.wp = (PreviousSeasons.setPWASP(team, oldSKU, "wp"));
+      this.wp = (PreviousSeasons.setPWASP(team, sku, "wp"));
     }
     catch (Exception e) {
       this.wp = 0;
@@ -157,7 +174,7 @@ public class Team {
   }
   public void setPAP() {
     try {
-      this.ap = (PreviousSeasons.setPWASP(team, oldSKU, "ap"));
+      this.ap = (PreviousSeasons.setPWASP(team, sku, "ap"));
     }
     catch (Exception e) {
       this.ap = 0;
@@ -165,14 +182,10 @@ public class Team {
   }
   public void setPSP() {
     try {
-      this.sp = (PreviousSeasons.setPWASP(team, oldSKU, "sp"));
+      this.sp = (PreviousSeasons.setPWASP(team, sku, "sp"));
     }
     catch (Exception e) {
       this.sp = 0;
     }
-  }
-  public void setOldSKU() throws IOException {
-    this.oldSKU = PreviousSeasons.getOldSKU(team, sku, false);
-    this.old2SKU = PreviousSeasons.getOldSKU(team, sku, true);
   }
 }

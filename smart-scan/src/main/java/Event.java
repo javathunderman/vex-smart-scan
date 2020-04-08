@@ -35,7 +35,7 @@ public class Event {
         return datetime;
     }
     public String toString() {
-        return("SKU: " + sku + "\nSeason: " + season + "\nDate: " + datetime);
+        return "SKU: " + sku + "\nSeason: " + season + "\nDate: " + datetime;
     }
     public String getPreviousSeason(boolean twoyears) {
         String [] seasonList = {"Starstruck", "In+The+Zone", "Turning+Point", "Tower+Takeover"};
@@ -48,7 +48,7 @@ public class Event {
         }
         
         if(index-1 < 0) {
-            return("No season data found");
+            return "No season data found";
         }
         if(twoyears) {
             return seasonList[index-2];

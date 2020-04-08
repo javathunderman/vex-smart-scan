@@ -55,13 +55,13 @@ public class Team {
   }
   public String toString() {
     String output = "Team: " + team +"\nccwm: " + ccwm + "\nwp: " + wp + "\nap: " + ap + "\nsp: " + sp + "\nawards: " + awards + "\nSkills: " + skills +"\npccvm: " + pccvm + "\ntwoPCCVM: " + twopCCVM;
-    return(output);
+    return output;
   }
   public String getTeam() {
-    return(team);
+    return team;
   }
   public double getccwm() {
-    return(ccwm);
+    return ccwm;
   }
   public double getpccvm() {
     return pccvm;
@@ -88,7 +88,7 @@ public class Team {
     return sku;
   }
   public void setAwards(String season) throws IOException {
-    URL url = new URL("http://api.vexdb.io/v1/get_awards?team=" + team + "&season=" + season);
+    URL url = new URL(Rank.getApiURL() + "get_awards?team=" + team + "&season=" + season);
     ArrayList<String> awardList = new ArrayList<String>();
     InputStreamReader reader = new InputStreamReader(url.openStream());
     JsonParser jsonParser = new JsonParser();
@@ -116,7 +116,7 @@ public class Team {
     return awards;
   }
   public void setSkills() throws IOException {
-    URL url = new URL("http://api.vexdb.io/v1/get_skills?type=2&team=" + team + "&sku=" + sku);
+    URL url = new URL(Rank.getApiURL() + "get_skills?type=2&team=" + team + "&sku=" + sku);
     InputStreamReader reader = new InputStreamReader(url.openStream());
     JsonParser jsonParser = new JsonParser();
     JsonArray results = (JsonArray) jsonParser.parse(reader).getAsJsonObject().get("result"); //idk what the hell this is

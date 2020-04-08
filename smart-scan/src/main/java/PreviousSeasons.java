@@ -31,7 +31,7 @@ public class PreviousSeasons {
         {
             System.out.println("Error, getOldSKU handler - parsing currentDateString");
         }
-        URL url = new URL("https://api.vexdb.io/v1/get_events?season=" + eventThing.getPreviousSeason(twoyears) + "&team=" + team);
+        URL url = new URL( Rank.getApiURL() + "get_events?season=" + eventThing.getPreviousSeason(twoyears) + "&team=" + team);
         
         InputStreamReader reader = new InputStreamReader(url.openStream());
         JsonParser jsonParser = new JsonParser();
@@ -71,50 +71,50 @@ public class PreviousSeasons {
         Date nearest = (getDateNearest(previousDateList, currentDate));
         
         int indexSKUlookup = previousDateList.indexOf(nearest);
-        return(previousdates.get(indexSKUlookup));
+        return previousdates.get(indexSKUlookup);
     }
     public static double setPCCWM(String team, String sku, boolean twoyears) throws IOException {
         String oldSKU = getOldSKU(team, sku, twoyears);
         JsonParser jsonParser = new JsonParser();
-        URL url2 = new URL("https://api.vexdb.io/v1/get_rankings?team="+team + "&sku="+oldSKU);
+        URL url2 = new URL(Rank.getApiURL() + "get_rankings?team="+team + "&sku="+oldSKU);
         
         InputStreamReader reader2 = new InputStreamReader(url2.openStream());
 
         try {
             JsonArray stuff2 = (JsonArray) jsonParser.parse(reader2).getAsJsonObject().get("result"); //idk what the hell this is
             
-            return(stuff2.get(0).getAsJsonObject().get("ccwm").getAsDouble());
+            return stuff2.get(0).getAsJsonObject().get("ccwm").getAsDouble();
 
         }
         catch (Exception e) {
-            return(0.0);
+            return 0.0;
         }
     }
     public static int setPWASP(String team, String sku, String option) throws IOException {
         String oldSKU = getOldSKU(team, sku, false);
         JsonParser jsonParser = new JsonParser();
-        URL url2 = new URL("https://api.vexdb.io/v1/get_rankings?team="+team + "&sku="+oldSKU);
+        URL url2 = new URL(Rank.getApiURL() + "get_rankings?team="+team + "&sku="+oldSKU);
         
         InputStreamReader reader2 = new InputStreamReader(url2.openStream());
 
         try {
             JsonArray stuff2 = (JsonArray) jsonParser.parse(reader2).getAsJsonObject().get("result"); //idk what the hell this is
             if(option.equals("wp")) {
-                return(stuff2.get(0).getAsJsonObject().get("wp").getAsInt());
+                return stuff2.get(0).getAsJsonObject().get("wp").getAsInt();
             }
             else if(option.equals("ap")) {
-                return(stuff2.get(0).getAsJsonObject().get("ap").getAsInt());
+                return stuff2.get(0).getAsJsonObject().get("ap").getAsInt();
             }
             else if(option.equals("sp")) {
-                return(stuff2.get(0).getAsJsonObject().get("sp").getAsInt());
+                return stuff2.get(0).getAsJsonObject().get("sp").getAsInt();
             }
             else {
-                return(0);
+                return 0;
             }
 
         }
         catch (Exception e) {
-            return(0);
+            return 0;
         }
     }
 

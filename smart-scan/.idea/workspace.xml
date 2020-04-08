@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd3cfe72-2fe8-4848-89a4-02b180baf3cf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/SmartScanTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/PreviousSeasons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/PreviousSeasons.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Rank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Rank.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Team.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Team.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />

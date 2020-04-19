@@ -16,12 +16,12 @@ public class Event {
     public void setSeason() throws IOException {
 
         URL url = new URL("http://api.vexdb.io/v1/get_events?sku=" + sku);
-        //System.out.println(url);
+        
         InputStreamReader reader = new InputStreamReader(url.openStream());
         JsonParser jsonParser = new JsonParser();
         JsonArray results = (JsonArray) jsonParser.parse(reader).getAsJsonObject().get("result"); //idk what the hell this is
         JsonObject result =  new Gson().fromJson(results.get(0), JsonObject.class);
-        //System.out.println(result);
+        
         this.season = java.net.URLEncoder.encode((result.get("season").getAsString()), "UTF-8").replace(" ", "%20");
         this.datetime = java.net.URLEncoder.encode((result.get("start").getAsString()), "UTF-8").replace(" ", "%20");
     }
@@ -35,7 +35,7 @@ public class Event {
         return datetime;
     }
     public String toString() {
-        return("SKU: " + sku + "\nSeason: " + season + "\nDate: " + datetime);
+        return "SKU: " + sku + "\nSeason: " + season + "\nDate: " + datetime;
     }
     public String getPreviousSeason(boolean twoyears) {
         String [] seasonList = {"Starstruck", "In+The+Zone", "Turning+Point", "Tower+Takeover"};
@@ -46,9 +46,9 @@ public class Event {
                 break;
             }
         }
-        //System.out.println(index);
+        
         if(index-1 < 0) {
-            return("No season data found");
+            return "No season data found";
         }
         if(twoyears) {
             return seasonList[index-2];

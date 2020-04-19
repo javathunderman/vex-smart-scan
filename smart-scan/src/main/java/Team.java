@@ -1,12 +1,8 @@
 import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,20 +16,18 @@ public class Team {
   private int wp;
   private int ap;
   private int sp;
-  private double trsp;
   private int awards = 0;
   private int skills;
   private String sku;
   private int finalScore;
 
-  public Team(String team, String sku, double ccwm, int wp, int ap, int sp, double trsp) {
+  public Team(String team, String sku, double ccwm, int wp, int ap, int sp) {
     this.team = team;
     this.sku = sku;
     this.ccwm = ccwm;
     this.wp = wp;
     this.ap = ap;
     this.sp = sp;
-    this.trsp = trsp;
     this.pccvm = 0.0;
   }
   public Team(String team) {
@@ -43,7 +37,6 @@ public class Team {
     this.wp = 0;
     this.ap = 0;
     this.sp = 0;
-    this.trsp = 0;
     this.pccvm = 0.0;
   }
   public void setSKU(String skuOriginal) {
@@ -52,25 +45,23 @@ public class Team {
   public void setfinalScore() {
     double tmpfinalScore = (3*ccwm) + (1.5*awards) + 1.5*(pccvm + twopCCVM) + (3*skills) + (0.3*wp) + (0.2*(ap+sp));
     this.finalScore = ((int)tmpfinalScore);
-    //return((int)tmpfinalScore);
   }
   public void setfinalScoreNR() {
     double tmpfinalScore = (1.5*awards) + 3*(pccvm + twopCCVM) + (3*skills) + (0.3*wp) + (0.2*(ap+sp));
     this.finalScore = ((int)tmpfinalScore);
-    //return((int)tmpfinalScore);
   }
   public int getFinalScore() {
     return finalScore;
   }
   public String toString() {
-    String output = "Team: " + team +"\nccwm: " + ccwm + "\nwp: " + wp + "\nap: " + ap + "\nsp: " + sp + "\ntrsp: " + trsp + "\nawards: " + awards + "\nSkills: " + skills +"\npccvm: " + pccvm + "\ntwoPCCVM: " + twopCCVM;
-    return(output);
+    String output = "Team: " + team +"\nccwm: " + ccwm + "\nwp: " + wp + "\nap: " + ap + "\nsp: " + sp + "\nawards: " + awards + "\nSkills: " + skills +"\npccvm: " + pccvm + "\ntwoPCCVM: " + twopCCVM;
+    return output;
   }
   public String getTeam() {
-    return(team);
+    return team;
   }
   public double getccwm() {
-    return(ccwm);
+    return ccwm;
   }
   public double getpccvm() {
     return pccvm;
@@ -87,9 +78,6 @@ public class Team {
   public int getSP() {
     return sp;
   }
-  public double getTRSP() {
-    return trsp;
-  }
   public int getAwardsTotal() {
     return awards;
   }
@@ -100,7 +88,7 @@ public class Team {
     return sku;
   }
   public void setAwards(String season) throws IOException {
-    URL url = new URL("http://api.vexdb.io/v1/get_awards?team=" + team + "&season=" + season);
+    URL url = new URL(Rank.getApiURL() + "get_awards?team=" + team + "&season=" + season);
     ArrayList<String> awardList = new ArrayList<String>();
     InputStreamReader reader = new InputStreamReader(url.openStream());
     JsonParser jsonParser = new JsonParser();
@@ -128,7 +116,7 @@ public class Team {
     return awards;
   }
   public void setSkills() throws IOException {
-    URL url = new URL("http://api.vexdb.io/v1/get_skills?type=2&team=" + team + "&sku=" + sku);
+    URL url = new URL(Rank.getApiURL() + "get_skills?type=2&team=" + team + "&sku=" + sku);
     InputStreamReader reader = new InputStreamReader(url.openStream());
     JsonParser jsonParser = new JsonParser();
     JsonArray results = (JsonArray) jsonParser.parse(reader).getAsJsonObject().get("result"); //idk what the hell this is
@@ -140,7 +128,7 @@ public class Team {
     }
   }
   public void setPccvm(boolean twoyears) throws IOException {
-    //System.out.println("SKU" + sku);
+    
     try {
       if(twoyears) {
         this.twopCCVM = (PreviousSeasons.setPCCWM(team, sku, twoyears));
@@ -153,11 +141,11 @@ public class Team {
     catch (Exception e) {
       if(twoyears) {
         this.twopCCVM = 0.0;
-        //System.out.println(e);
+        
       }
       else {
         this.pccvm = 0.0;
-        //System.out.println(e);
+        
       }
 
     }
@@ -168,7 +156,7 @@ public class Team {
   }
   public void setPWP() {
     try {
-      this.wp = (PreviousSeasons.setPWP(team, sku));
+      this.wp = (PreviousSeasons.setPWASP(team, sku, "wp"));
     }
     catch (Exception e) {
       this.wp = 0;
@@ -176,7 +164,7 @@ public class Team {
   }
   public void setPAP() {
     try {
-      this.ap = (PreviousSeasons.setPAP(team, sku));
+      this.ap = (PreviousSeasons.setPWASP(team, sku, "ap"));
     }
     catch (Exception e) {
       this.ap = 0;
@@ -184,7 +172,7 @@ public class Team {
   }
   public void setPSP() {
     try {
-      this.sp = (PreviousSeasons.setPSP(team, sku));
+      this.sp = (PreviousSeasons.setPWASP(team, sku, "sp"));
     }
     catch (Exception e) {
       this.sp = 0;
